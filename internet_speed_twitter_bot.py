@@ -22,6 +22,7 @@ def get_driver() -> webdriver:
     Returns: selenium webdriver
     """
 
+    # use this if you want to use your normal browser
     user_data_dir = os.environ.get("USER_DATA_DIR")
 
     # add chrome options
@@ -36,6 +37,9 @@ def get_driver() -> webdriver:
 
 class TwitterComplaintBot:
     def __init__(self) -> None:
+        """
+        if your internet speeds are below the threshold, tags your ISP on Twitter and complains
+        """
         with open(EXPECTED_SPEEDS_PATH, 'r') as file:
             expected_speeds = json.load(file)
         
@@ -49,6 +53,11 @@ class TwitterComplaintBot:
             self.tweet_at_provider(message)
     
     def get_internet_speed(self) -> tuple[float, float]:
+        """
+        gets your current internet performance speeds from speedtest.net
+        Returns: (download_speed, upload_speed)
+        """
+
         print("======= Getting Internet Speeds =======")
         self.driver.get(SPEEDNET_URL)
         start_button = self.driver.find_element(By.CSS_SELECTOR,
@@ -66,6 +75,14 @@ class TwitterComplaintBot:
         return float(download_speed), float(upload_speed)
     
     def tweet_at_provider(self, message) -> None:
+        """
+        tweets @ your internet provider, the message provided
+        Args:
+            message: The message to tweet @ your ISP
+
+        Returns: None
+        """
+
         with open(TWITTER_CREDS_PATH, 'r') as file:
             twitter_creds = json.load(file)
 
@@ -84,6 +101,14 @@ class TwitterComplaintBot:
         print("posted tweet")
 
     def login_to_twitter(self, username: str, password: str) -> None:
+        """
+        logs you into twitter from an incognito tab
+        Args:
+            username: Twitter username handle or email
+            password: Twitter password
+
+        Returns: None
+        """
         # close welcome message
         cancel_button = self.driver.find_element(By.CSS_SELECTOR, "button.css-175oi2r.r-sdzlij.r-1phboty.r-rs99b7.r"
                                                                   "-lrvibr.r-2yi16.r-1qi8awa.r-3pj75a.r-1loqt21.r"
