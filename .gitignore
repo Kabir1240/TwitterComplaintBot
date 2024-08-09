@@ -184,6 +184,7 @@ fabric.properties
 
 new_git.bat
 keys.json
+twitter_creds.json
 
 # idea folder, uncomment if you don't need it
 # .idea
